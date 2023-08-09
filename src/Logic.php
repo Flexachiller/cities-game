@@ -1,6 +1,7 @@
 <?php
 
 use flexgame\CitiesParserFromFile;
+require_once "CitiesParserFromFile.php";
 
 class Logic
 {
@@ -12,6 +13,13 @@ class Logic
     public $steps = 1;
     public $last_char;
     private bool $game_run = true;
+
+    public function __construct()
+    {
+        $parser = new CitiesParserFromFile();
+        $this->all_cities = $parser->init();
+        $this->game();
+    }
 
     //Проверка, чей сейчас ход. Ход пользователя кратен 2
     public function checkSteps()
@@ -49,7 +57,7 @@ class Logic
     //если не входит - записывает последнюю букву в поле $last_char
     public function checkInput($word=null)
     {
-        $this->current_word = $this->entered_cities[-1];
+        $this->current_word = $this->entered_cities[array_key_last($this->entered_cities)];
 
         if($word !== null)
         {
@@ -136,7 +144,7 @@ class Logic
 
         if($this->steps === 1)
         {
-            $current_city_id = rand(0, count($this->all_cities));
+            $current_city_id = rand(0, count($this->all_cities) - 1);
             $current_city = $this->all_cities[$current_city_id];
             $this->entered_cities[] = $current_city;
             $this->steps++;
