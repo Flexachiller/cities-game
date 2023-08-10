@@ -1,6 +1,7 @@
 <?php
 
-use flexgame\CitiesParserFromFile;
+mb_internal_encoding('UTF-8');
+
 require_once "CitiesParserFromFile.php";
 
 class Logic
@@ -9,7 +10,7 @@ class Logic
     public array $all_cities;
     public $user_word;
     public $current_word;
-    public $invalid_chars = ['ъ', 'ь', 'ы', ' ', '\n'];
+    public $invalid_chars = ['ъ', 'ь', 'ы', ' ', '\n', '"', '\'', null];
     public $steps = 1;
     public $last_char;
     private bool $game_run = true;
@@ -30,19 +31,19 @@ class Logic
     //Получаем слово от пользователя
     public function getUserWord()
     {
-        $this->user_word = strtolower(htmlspecialchars($_POST['city']));
+        $this->user_word = mb_strtolower(htmlspecialchars($_POST['city']));
     }
     
     //Получаем последнюю букву в слове
     public function getLastChar($word)
     {
-        $this->last_char = substr($word, -1);
+        return mb_substr($word, -1);
     }
 
     //Проверяем последнюю букву на наличие в списке недопустимых и возвращаем true/false
     public function isValidLastChar()
     {
-        $this->last_char = $this->getLastChar($this->user_word);
+        $this->last_char = $this->getLastChar($this->current_word);
         if(!in_array($this->last_char, $this->invalid_chars))
         {
             return true;
@@ -63,19 +64,15 @@ class Logic
         {
             $this->current_word = $word;
         }
-        
     
-        if(!$this->isValidLastChar($this->current_word, $this->invalid_chars))
+        if(!$this->isValidLastChar())
         {
             $this->current_word = mb_substr($this->current_word, -1, 1);
             return $this->checkInput($this->current_word);
         }
-        else
-        {
-            $this->getLastChar($this->current_word);
-            return true;
-        }
-    
+
+        return true;
+        
     }
 
     //Ход игрока. Даётся 3 попытки назвать город. Если условия названия соблюдены, то доавляем город в поле $entered_cities, ход переходит компьютеру; 
@@ -106,7 +103,7 @@ class Logic
                     }
                     else
                     {
-                        $entered_cities[] = $this->user_word;
+                        $this->entered_cities[] = $this->user_word;
                         $this->steps++;
                         break;
                     }
@@ -149,6 +146,7 @@ class Logic
             $this->entered_cities[] = $current_city;
             $this->steps++;
             $lose = false;
+            return $current_city;
         }
         else
         {
@@ -164,9 +162,9 @@ class Logic
                     else
                     {
                         $lose = false;
-                        $entered_cities[] = $current_city;
+                        $this->entered_cities[] = $current_city;
                         $this->steps++;
-                        break;
+                        return $current_city;
                     }
                 }
             }

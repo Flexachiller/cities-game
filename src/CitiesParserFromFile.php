@@ -1,6 +1,6 @@
 <?php
 
-namespace flexgame;
+mb_internal_encoding('UTF-8');
 
 class CitiesParserFromFile
 {
@@ -38,10 +38,12 @@ class CitiesParserFromFile
     {
         $file = fopen(self::FILE_PATH, 'r');
 
-        while(!feof($file))
-        {
-            $this->cities[] = strtolower(htmlentities(fgets($file)));
-        }
+        #while(!feof($file))
+        #{
+            #$this->cities[] = trim(mb_strtolower(htmlentities(fgets($file))));
+        #}
+        $this->cities[] = 'абакан';
+        $this->cities[] = 'норильск';
 
         fclose($file);
     }

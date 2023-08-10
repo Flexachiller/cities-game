@@ -1,6 +1,7 @@
 <?php 
 require_once("src/Logic.php");
 
+
 if(isset($_POST['submit']))
 {
     $game = new Logic();
@@ -15,12 +16,12 @@ if(isset($_POST['submit']))
     <title>Document</title>
 </head>
 <body>
-    <form action="" method="post">
+    <form method="post">
         <label>Слово:</label>
-        <label><?php echo $game->all_cities[array_key_last($game->all_cities)];?></label>
-        <input type="text" name="city" namespace="Введите слово">
+        <label><?php if(isset($game)){ echo $game->all_cities[array_key_last($game->all_cities)]; }; ?></label>
+        <input type="text" name="city">
         <br><br><br>
-        <input type="submit" name="submit" value="Отправить">  
+        <input type="submit" name="submit" value="Отправить" >  
     </form>
 </body>
 </html>
