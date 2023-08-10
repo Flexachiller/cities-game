@@ -38,12 +38,10 @@ class CitiesParserFromFile
     {
         $file = fopen(self::FILE_PATH, 'r');
 
-        #while(!feof($file))
-        #{
-            #$this->cities[] = trim(mb_strtolower(htmlentities(fgets($file))));
-        #}
-        $this->cities[] = 'абакан';
-        $this->cities[] = 'норильск';
+        while(!feof($file))
+        {
+            $this->cities[] = trim(htmlentities(fgets($file)));
+        }
 
         fclose($file);
     }

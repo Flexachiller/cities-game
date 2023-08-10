@@ -143,7 +143,7 @@ class Logic
         {
             $current_city_id = rand(0, count($this->all_cities) - 1);
             $current_city = $this->all_cities[$current_city_id];
-            $this->entered_cities[] = $current_city;
+            $this->entered_cities[] = mb_strtolower($current_city);
             $this->steps++;
             $lose = false;
             return $current_city;
@@ -162,7 +162,7 @@ class Logic
                     else
                     {
                         $lose = false;
-                        $this->entered_cities[] = $current_city;
+                        $this->entered_cities[] = mb_strtolower($current_city);
                         $this->steps++;
                         return $current_city;
                     }
