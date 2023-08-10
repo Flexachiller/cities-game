@@ -80,56 +80,61 @@ class Logic
     public function userStep()
     {
         $tries = 3;
-        
-        for($i = 0; $i<3; $i++)
-        {
-            $this->getUserWord();
-            $this->checkInput();
 
-            //Если слово юзера начинается на последнюю букву
-            if(str_starts_with($this->user_word, $this->last_char))
+        $this->getUserWord();
+        $this->checkInput();
+
+        //Если слово юзера начинается на последнюю букву
+        if(str_starts_with($this->user_word, $this->last_char))
+        {
+            if(in_array($this->user_word, $this->all_cities))
             {
-                if(in_array($this->user_word, $this->all_cities))
+                if(in_array($this->user_word, $this->entered_cities))
                 {
-                    if(in_array($this->user_word, $this->entered_cities))
+                    echo "Город уже был назван";
+                    
+                    $tries -= 1;
+                    if($tries < 1)
                     {
-                        echo "Город уже был назван";
-                        
-                        $tries -= 1;
-                        if($tries < 1)
-                        {
-                            $this->game_run = false;
-                        }
-                    }
-                    else
-                    {
-                        $this->entered_cities[] = $this->user_word;
-                        $this->steps++;
-                        break;
+                        $this->game_run = false;
                     }
                 }
                 else
                 {
-                    echo "Такого города не существует";
-
-                    $tries -= 1;
-                    if($tries < 1)
-                    {
-                        $this->game_run = false;
-                    }
+                    $this->entered_cities[] = $this->user_word;
+                    $this->steps++;
                 }
             }
             else
             {
-                echo "Слово должно начинаться на - " . $this->last_char;
-
-                    $tries -= 1;
-                    if($tries < 1)
-                    {
-                        $this->game_run = false;
-                    }
+                echo "Такого города не существует";
+                $tries -= 1;
+                if($tries < 1)
+                {
+                    $this->game_run = false;
+                }
             }
         }
+        else
+        {
+            echo "Слово должно начинаться на - " . $this->last_char;
+                $tries -= 1;
+                if($tries < 1)
+                {
+                    $this->game_run = false;
+                }
+        }
+    }
+
+
+    public function init()
+    {
+        $current_city_id = rand(0, count($this->all_cities) - 1);
+        $current_city = $this->all_cities[$current_city_id];
+        $this->entered_cities[] = mb_strtolower($current_city);
+        $this->steps++;
+
+        return $current_city;
     }
 
     //Ход компьютера. Если первый ход, то выбирает случайное слово из списка городов.
@@ -139,36 +144,25 @@ class Logic
     {
         $lose = true;
 
-        if($this->steps === 1)
+        for($i=0; $i<count($this->all_cities); $i++)
         {
-            $current_city_id = rand(0, count($this->all_cities) - 1);
-            $current_city = $this->all_cities[$current_city_id];
-            $this->entered_cities[] = mb_strtolower($current_city);
-            $this->steps++;
-            $lose = false;
-            return $current_city;
-        }
-        else
-        {
-            for($i=0; $i<count($this->all_cities); $i++)
+            $current_city = $this->all_cities[$i];
+            if (str_starts_with($current_city, $this->last_char))
             {
-                $current_city = $this->all_cities[$i];
-                if (str_starts_with($current_city, $this->last_char))
+                if(in_array($current_city, $this->entered_cities))
                 {
-                    if(in_array($current_city, $this->entered_cities))
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        $lose = false;
-                        $this->entered_cities[] = mb_strtolower($current_city);
-                        $this->steps++;
-                        return $current_city;
-                    }
+                    continue;
+                }
+                else
+                {
+                    $lose = false;
+                    $this->entered_cities[] = mb_strtolower($current_city);
+                    $this->steps++;
+                    return $current_city;
                 }
             }
         }
+        
         if($lose)
         {
             $this->game_run = false;
@@ -178,6 +172,8 @@ class Logic
     //Установка хода юзера/компьютера и проверка, кто выйграл, после окончания игры 
     public function game()
     {
+        $this->init();
+        
         while($this->game_run)
         {
             if($this->checkSteps())

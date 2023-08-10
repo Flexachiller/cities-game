@@ -17,8 +17,8 @@ if(isset($_POST['submit']))
 </head>
 <body>
     <form method="post">
-        <label>Слово:</label>
-        <label><?php if(isset($game)){ echo $game->all_cities[array_key_last($game->all_cities)]; }; ?></label>
+        <label>Слово: <?php if(isset($game)){ echo $game->all_cities[array_key_last($game->entered_cities)]; }; ?></label>
+        <br>
         <input type="text" name="city">
         <br><br><br>
         <input type="submit" name="submit" value="Отправить" >  
