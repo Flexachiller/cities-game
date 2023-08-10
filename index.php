@@ -1,10 +1,13 @@
-<?php 
-require_once("src/Logic.php");
+<?php
+
+use App\Game;
+
+require_once("vendor/autoload.php");
 
 
 if(isset($_POST['submit']))
 {
-    $game = new Logic();
+    $game = new Game();
 }
 
 ?>

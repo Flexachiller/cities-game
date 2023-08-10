@@ -1,0 +1,16 @@
+{
+    "name": "drakosha/cities-game",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Drakosha\\CitiesGame\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Flexachiller",
+            "email": "krishtalev2017r@yandex.ru"
+        }
+    ],
+    "require": {}
+}

@@ -3,7 +3,7 @@ import requests
 import urllib.parse
 import codecs
 
-FILE_ADDRESS = "G:/XAMPP/htdocs/cities-game/cities.txt"
+FILE_ADDRESS = "G:/XAMPP/htdocs/cities-game/src/Parser/cities.txt"
 
 alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЭЮЯ'
 
